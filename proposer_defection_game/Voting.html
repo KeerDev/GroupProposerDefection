@@ -1,0 +1,51 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Voting Stage{% endblock %}
+
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <!--<h3>Round {{ sub_round }} of {{ total_sub_rounds }}</h3>-->
+<h3>{{ round_display }}</h3>
+  <h4 class="text-primary mb-3">You are Player {{ player.id_in_group }}</h4>
+
+  {% if proposer_changed %}
+    <div class="alert alert-warning">
+      New proposer — <strong>Player {{ current_proposer_id }}</strong> is now the proposer.
+    </div>
+  {% else %}
+      <div>
+      <strong> Player {{ current_proposer_id }} is the proposer.</strong>
+    </div>
+  {% endif %}
+
+
+
+  <p>The proposer has suggested the following division of <strong>€{{ C.TOTAL_AMOUNT }}</strong>:</p>
+
+  <table class="table table-bordered" id="allocationTable">
+    <thead>
+      <tr>
+        <th>Player</th>
+        <th>Allocation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for amount in group.proposer_allocation.split(',') %}
+      <tr {% if forloop.counter == player.id_in_group %}class="table-primary"{% endif %}>
+        <td>Player {{ forloop.counter }}</td>
+        <td>€{{ amount }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <hr>
+  <p><strong>In this allocation you will receive:</strong> €{{ player.proposed_amount }}</p>
+
+  <p>Please vote on whether you <strong>accept</strong> or <strong>reject</strong> this proposed allocation:</p>
+  <div class="mt-2">{{ formfield 'vote' }}</div>
+
+  <div class="mt-3 text-center">{{ next_button }}</div>
+</div>
+{% endblock %}

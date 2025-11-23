@@ -1,0 +1,61 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Proposer Decision
+{% endblock %}
+
+{% block content %}
+<h3>Round {{ sub_round }} of {{ total_sub_rounds }}</h3>
+    <h3>You are the Proposer (Player {{ player.id_in_group }})</h3>
+<p>You have <strong>€{{ total_amount }}</strong> to allocate among six players (including yourself).</p>
+<form method="post">
+<table class="table table-bordered" style="width:60%; margin:auto; text-align:center;">
+    <thead class="table-light">
+        <tr>
+            <th style="width:50%;">Player</th>
+            <th style="width:50%;">Allocation (€)</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for field in form %}
+    <tr
+        {% if forloop.counter == proposer_id %}
+            style="background-color:#fff3cd; font-weight:bold;"
+        {% endif %}
+    >
+        <td>
+            {% if forloop.counter == proposer_id %}
+                {{ field.label }} (You)
+            {% else %}
+                {{ field.label }}
+            {% endif %}
+        </td>
+        <td>{{ field }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+</table>
+
+
+<script>
+    const fields = document.querySelectorAll('input[type="number"]');
+    const totalDisplay = document.getElementById('totalDisplay');
+
+    function updateTotal() {
+        let total = 0;
+        fields.forEach(f => total += parseFloat(f.value || 0));
+        totalDisplay.textContent = total.toFixed(2);
+    }
+
+    fields.forEach(f => f.addEventListener('input', updateTotal));
+    updateTotal();
+</script>
+
+
+<div style="text-align:center; margin-top:20px;">
+    {% next_button %}
+</div>
+</form>
+{% endblock %}

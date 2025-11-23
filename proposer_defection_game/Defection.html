@@ -1,0 +1,92 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+
+{% block title %}
+Defection Opportunity
+{% endblock %}
+
+
+{% block content %}
+   <p>Congratulations! The majority accepted your proposal.</p>
+
+
+<p>You can now choose to change (defect from) your original allocation and set a new one,
+or leave it as it is.
+The total must still add up to <strong>€{{ total_amount }}</strong>. This final allocation is the one that will be implemented.</p>
+<!--<p><strong>Initial Proposal:</strong> {{ group.proposer_allocation }}</p>-->
+
+ <!-- Transposed Initial Allocation (players as columns) -->
+  <p style="text-align:center; font-weight:bold;">Your Initial Allocation for reference</p>
+  <table class="table table-bordered" style="width:auto; margin:auto; font-size:0.8rem; text-align:center; padding:0.1rem;">
+    <thead class="table-light">
+      <tr>
+        {% for i in prev_allocations %}
+          <th {% if forloop.counter == proposer_id %} style="background-color:#fff3cd;" {% endif %}>
+            Player {{ forloop.counter }}{% if forloop.counter == proposer_id %} (You){% endif %}
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        {% for prev in prev_allocations %}
+          <td {% if forloop.counter == proposer_id %} style="background-color:#fff3cd;" {% endif %}>
+            €{{ prev }}
+          </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+
+     <!-- Gap between tables -->
+  <div style="height:30px;"></div>
+<form method="post">
+<table class="table table-bordered" style="width:60%; margin:auto; text-align:center;">
+   <thead class="table-light">
+       <tr>
+           <th style="width:50%;">Player</th>
+           <th style="width:50%;">Final Allocation (€)</th>
+       </tr>
+   </thead>
+   <tbody>
+       {% for i in "123456" %}
+       <tr {% if forloop.counter == proposer_id %} style="background-color:#fff3cd; font-weight:bold;" {% endif %}>
+           <td>
+               Player {{ forloop.counter }}{% if forloop.counter == proposer_id %} (You){% endif %}
+           </td>
+           <td>
+               <input type="number" name="allocation_p{{ forloop.counter }}" value="" min="0" required>
+           </td>
+       </tr>
+       {% endfor %}
+   </tbody>
+</table>
+
+
+
+
+
+<script>
+   const fields = document.querySelectorAll('input[type="number"]');
+   const totalDisplay = document.getElementById('totalDisplay');
+
+
+   // Update total dynamically
+   function updateTotal() {
+       let total = 0;
+       fields.forEach(f => total += parseFloat(f.value || 0));
+       totalDisplay.textContent = total.toFixed(2);
+   }
+
+
+   fields.forEach(f => f.addEventListener('input', updateTotal));
+   updateTotal();
+</script>
+
+
+<div style="text-align:center; margin-top:1rem;">
+    {% next_button %}
+  </div>
+</form>
+{% endblock %}

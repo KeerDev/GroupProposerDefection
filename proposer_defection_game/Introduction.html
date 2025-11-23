@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<h3>Welcome to the Game</h3>
+<p>
+You are in a group of six participants. In each round:
+</p>
+<ul>
+  <li>One participant will be randomly assigned as the <strong>Proposer</strong>.</li>
+  <li>The proposer decides how to split <strong>€{{ C.TOTAL_AMOUNT }}</strong> among all six participants (including themselves).</li>
+  <li>The other five will either <strong>accept</strong> or <strong>reject</strong> the proposed allocation.</li>
+  <li>If the <strong>majority accepts</strong>, the proposer can then <strong>defect</strong> and make a new allocation.</li>
+<li>This new allocation is the one that will be implemented</li>
+    <li>This process repeats for three rounds.</li>
+    <li> If majority rejects, everyone gets 0€ that round</li>
+<li>Your total payoff is the sum of what you receive for the three rounds</li>
+</ul>
+
+<p>Click “Next” to begin.</p>
+
+{{ next_button }}
+{% endblock %}
